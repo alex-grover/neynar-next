@@ -1,0 +1,63 @@
+{
+  "name": "neynar-next",
+  "description": "Create Farcaster apps with Next.js and Neynar",
+  "version": "0.0.1",
+  "author": "Alex Grover <hello@alexgrover.me> (https://alexgrover.me)",
+  "license": "ISC",
+  "keywords": [
+    "farcaster",
+    "nextjs",
+    "neynar"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts",
+    "check:lint": "eslint .",
+    "fix:lint": "eslint . --fix",
+    "check:format": "prettier --check --cache .",
+    "fix:format": "prettier --write --cache .",
+    "check:types": "tsc",
+    "prepare": "husky install"
+  },
+  "peerDependencies": {
+    "next": ">=13",
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@alex-grover/eslint-config": "^0.0.5",
+    "@alex-grover/prettier-config": "0.0.2",
+    "@tsconfig/next": "^2.0.0",
+    "@types/node": "^20.6.3",
+    "@types/react": "^18.2.22",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "eslint": "^8.50.0",
+    "eslint-config-next": "^13.5.2",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-css-modules": "^2.11.4",
+    "eslint-plugin-import": "^2.28.1",
+    "husky": "^8.0.0",
+    "lint-staged": "^14.0.1",
+    "next": "^13.5.2",
+    "prettier": "3.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.2.2"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.!(ts|tsx|css)": "prettier --write --ignore-unknown"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@alex-grover",
+      "next/core-web-vitals"
+    ]
+  },
+  "prettier": "@alex-grover/prettier-config"
+}
