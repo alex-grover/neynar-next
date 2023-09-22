@@ -1,3 +1,4 @@
 {
-  "extends": "@tsconfig/next/tsconfig.json"
+  "extends": "@tsconfig/next/tsconfig.json",
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
