@@ -10,7 +10,7 @@
     "neynar"
   ],
   "scripts": {
-    "build": "tsup src/index.ts",
+    "build": "tsup",
     "check:lint": "eslint .",
     "fix:lint": "eslint . --fix",
     "check:format": "prettier --check --cache .",
@@ -19,9 +19,10 @@
     "prepare": "husky install"
   },
   "peerDependencies": {
-    "next": ">=13",
-    "react": ">=18",
-    "react-dom": ">=18"
+    "next": "^13",
+    "react": "^18",
+    "react-dom": "^18",
+    "viem": "^1"
   },
   "devDependencies": {
     "@alex-grover/eslint-config": "^0.0.5",
@@ -44,7 +45,14 @@
     "prettier": "3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "viem": "^1.12.1"
+  },
+  "tsup": {
+    "entry": {
+      "index": "src/client/index.ts",
+      "server": "src/server/index.ts"
+    }
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -57,7 +65,10 @@
     "extends": [
       "@alex-grover",
       "next/core-web-vitals"
-    ]
+    ],
+    "rules": {
+      "@next/next/no-html-link-for-pages": "off"
+    }
   },
   "prettier": "@alex-grover/prettier-config"
 }
