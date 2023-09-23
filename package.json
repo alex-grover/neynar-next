@@ -3,7 +3,7 @@
   "description": "Create Farcaster apps with Next.js and Neynar",
   "version": "0.0.1",
   "author": "Alex Grover <hello@alexgrover.me> (https://alexgrover.me)",
-  "license": "ISC",
+  "license": "MIT",
   "keywords": [
     "farcaster",
     "nextjs",
