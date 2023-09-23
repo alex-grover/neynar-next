@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/alex-grover/neynar-next/compare/v0.1.0...v0.1.1) (2023-09-23)
+
+
+### Features
+
+* add user by fid fetching ([98b8a54](https://github.com/alex-grover/neynar-next/commit/98b8a5420d967ae2c736640bbbe608a253fce844))
+
 ## [0.1.0](https://github.com/alex-grover/neynar-next/compare/v0.0.7...v0.1.0) (2023-09-23)
 
 
