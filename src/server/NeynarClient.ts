@@ -72,7 +72,9 @@ export default class NeynarClient {
   private post(pathname: string, body?: Record<string, string | number>) {
     const bodyParams = body
       ? {
-          'Content-Type': 'application/json',
+          headers: {
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify(body),
         }
       : {}
