@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.5](https://github.com/alex-grover/neynar-next/compare/v0.0.4...v0.0.5) (2023-09-23)
+
+
+### Bug Fixes
+
+* apply jsx transform during build ([fddf5c1](https://github.com/alex-grover/neynar-next/commit/fddf5c11a305e6b830d8fa622555ef82c95788b6))
+
 ## [0.0.4](https://github.com/alex-grover/neynar-next/compare/v0.0.3...v0.0.4) (2023-09-23)
 
 
