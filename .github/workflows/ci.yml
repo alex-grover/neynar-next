@@ -15,3 +15,4 @@ jobs:
       - run: npm run check:lint
       - run: npm run check:format
       - run: npm run check:types
+      - run: npx commitlint --from HEAD~${{ github.event.pull_request.commits }} --to HEAD --verbose
