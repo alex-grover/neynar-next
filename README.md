@@ -1,12 +1,13 @@
 # neynar-next
 
-Create Farcaster apps with Next.js and Neynar
+Create Farcaster apps with Neynar. Built with Next.js in mind, but works with any React client and JavaScript server.
 
 ### Features
 
 This repo is a work in progress, use at your own risk! Currently, the following features are supported:
 
 - [x] Sign in
+- [x] Get user profile by FID
 - [x] Fetch feed
 - [ ] Read/write casts
 - [ ] Search users
@@ -21,12 +22,13 @@ npm install neynar-next viem
 
 ## Usage
 
-### Sign in
+<details>
+<summary>Sign in</summary>
 
 Add the provider:
 
 ```tsx
-// app/layout.tsx
+// app/layout.tsx - similar implementation for pages/_app.tsx
 
 import { PropsWithChildren } from 'react'
 import { NeynarProvider } from 'neynar-next'
@@ -43,7 +45,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
 }
 ```
 
-Add the API to your server:
+Set up the client and add the API to your server:
 
 ```ts
 // lib/neynar.ts
@@ -59,7 +61,10 @@ const neynarClient = new NeynarClient(
 export default neynarClient
 ```
 
-#### `app` directory
+The client passes a query param of `?signer_uuid=XXX` and expects a Signer object back from the server.
+
+<details>
+<summary>`app` directory</summary>
 
 ```ts
 // app/api/signer/route.ts
@@ -83,7 +88,10 @@ export async function POST() {
 }
 ```
 
-#### `pages` directory
+</details>
+
+<details>
+<summary>`pages` directory</summary>
 
 ```ts
 // pages/api/signer.ts
@@ -110,6 +118,33 @@ export default async function handler(
   }
 }
 ```
+
+</details>
+
+It's possible to change the API path via the `NeynarProvider` `api` prop, if desired:
+
+<details>
+<summary>Customize API path</summary>
+
+```tsx
+// app/layout.tsx
+
+import { PropsWithChildren } from 'react'
+import { NeynarProvider } from 'neynar-next'
+
+export default function RootLayout({ children }: PropsWithChildren) {
+  return (
+    <html lang="en">
+      <head />
+      <body>
+        <NeynarProvider api="/api/neynar/signer">{children}</NeynarProvider>
+      </body>
+    </html>
+  )
+}
+```
+
+</details>
 
 Then, use the hook in your app:
 
@@ -167,7 +202,10 @@ export default function QRCodeModal() {
 }
 ```
 
-### Fetch user
+</details>
+
+<details>
+<summary>Fetch user</summary>
 
 After signing in, you'll likely want to fetch the user's profile so you can display their username and avatar. To do this, we need to create an API route and then fetch the user from the client:
 
@@ -213,7 +251,10 @@ export default function UserProfile() {
 }
 ```
 
-### Fetch feed
+</details>
+
+<details>
+<summary>Fetch feed</summary>
 
 Add the API to your server:
 
@@ -301,6 +342,4 @@ function getKey(signer: Signer | null): SWRInfiniteKeyLoader<FeedResponse> {
 }
 ```
 
-## Configuration
-
-TODO: customizing the api route
+</details>
