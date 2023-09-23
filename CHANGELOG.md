@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.1.0](https://github.com/alex-grover/neynar-next/compare/v0.0.7...v0.1.0) (2023-09-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* useNeynar hook renamed to useSigner
+
+### Features
+
+* implement feed fetching ([064f2b9](https://github.com/alex-grover/neynar-next/commit/064f2b965dcca0198acbcfc22d885e1096121ff3))
+
+
+### Code Refactoring
+
+* rename hook ([28a4dbb](https://github.com/alex-grover/neynar-next/commit/28a4dbb112525103866c54bef8d63b15e674632f))
+
 ## [0.0.7](https://github.com/alex-grover/neynar-next/compare/v0.0.6...v0.0.7) (2023-09-23)
 
 
