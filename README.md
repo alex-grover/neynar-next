@@ -115,11 +115,11 @@ Then, use the hook in your app:
 ```tsx
 'use client'
 
-import { useNeynar } from 'neynar-next'
+import { useSigner } from 'neynar-next'
 import { useCallback } from 'react'
 
 export default function LoginButton() {
-  const { signer, isLoading, signIn } = useNeynar()
+  const { signer, isLoading, signIn } = useSigner()
 
   const handleClick = useCallback(() => void signIn(), [signIn])
 
@@ -160,7 +160,7 @@ Then, hit the API from your client. This library is agnostic of your data fetchi
 ```tsx
 'use client'
 
-import { useNeynar } from 'neynar-next'
+import { useSigner } from 'neynar-next'
 import { FeedResponse, Signer } from 'neynar-next/server'
 import { useCallback } from 'react'
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite'
@@ -169,7 +169,7 @@ import CastPage from './cast-page'
 import styles from './casts.module.css'
 
 export default function Casts() {
-  const { signer, isLoading: signerLoading } = useNeynar()
+  const { signer, isLoading: signerLoading } = useSigner()
   const { data, isLoading, error, size, setSize } = useSWRInfinite<
     FeedResponse,
     string

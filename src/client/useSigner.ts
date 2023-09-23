@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import NeynarContext from './NeynarContext'
 
-export default function useNeynar() {
+export default function useSigner() {
   return useContext(NeynarContext)
 }
