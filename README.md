@@ -75,6 +75,7 @@ export async function GET(request: Request) {
   const signer = await neynarClient.getSigner(signerUuid)
 
   // If you also want the user's username + profile, or you can fetch separately
+  // TODO: this is not currently supported by the types
   if (signer.status === 'approved') {
     const user = await neynarClient.getUserByFid(signer.fid)
     return NextResponse.json({ ...signer, user })
@@ -140,6 +141,27 @@ export default function LoginButton() {
 
   // This should never happen, unless the server fails while registering the signer
   throw new Error(`Unknown signer status: ${signer.status}`)
+}
+```
+
+After the user clicks the sign in button, you'll need to render a QR code so they can add the signer from the Warpcast mobile app. You can do this with a package like [`react-qr-code`](https://github.com/rosskhanas/react-qr-code):
+
+```tsx
+'use client'
+
+import { useSigner } from 'neynar-next'
+import QRCode from 'react-qr-code'
+
+export default function QRCodeModal() {
+  const { signer } = useSigner()
+
+  if (signer?.status !== 'pending_approval') return null
+
+  return (
+    <div className="modal">
+      <QRCode value={signer.signer_approval_url} />
+    </div>
+  )
 }
 ```
 
