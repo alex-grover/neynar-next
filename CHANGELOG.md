@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.7](https://github.com/alex-grover/neynar-next/compare/v0.0.6...v0.0.7) (2023-09-23)
+
+
+### Bug Fixes
+
+* correctly set header ([5f35100](https://github.com/alex-grover/neynar-next/commit/5f35100f38a3e14b6d218126272e8dc6b293b820))
+
 ## [0.0.6](https://github.com/alex-grover/neynar-next/compare/v0.0.5...v0.0.6) (2023-09-23)
 
 
