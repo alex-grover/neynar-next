@@ -7,6 +7,7 @@ Create Farcaster apps with Next.js and Neynar
 This repo is a work in progress, use at your own risk! Currently, the following features are supported:
 
 - [x] Sign in
+- [x] Fetch feed
 - [ ] Read/write casts
 - [ ] Search users
 - [ ] Follow/unfollow
@@ -19,6 +20,8 @@ npm install neynar-next viem
 ```
 
 ## Usage
+
+### Sign in
 
 Add the provider:
 
@@ -56,7 +59,7 @@ const neynarClient = new NeynarClient(
 export default neynarClient
 ```
 
-### `app` directory
+#### `app` directory
 
 ```ts
 // app/api/signer/route.ts
@@ -79,7 +82,7 @@ export async function POST() {
 }
 ```
 
-### `pages` directory
+#### `pages` directory
 
 ```ts
 // pages/api/signer.ts
@@ -130,6 +133,94 @@ export default function LoginButton() {
 
   // This should never happen, unless the server fails while registering the signer
   throw new Error(`Unknown signer status: ${signer.status}`)
+}
+```
+
+### Fetch feed
+
+Add the API to your server:
+
+```ts
+// app/api/casts/route.ts
+
+import { NextResponse } from 'next/server'
+import { neynarClient } from '@/lib/neynar'
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const fid = parseInt(searchParams.get('fid'))
+  if (!fid) return new Response('fid query param is required', { status: 400 })
+  const feed = await neynarClient.getFollowingFeed(fid)
+  return NextResponse.json(feed)
+}
+```
+
+Then, hit the API from your client. This library is agnostic of your data fetching solution. The example uses [`swr`](https://swr.vercel.app), but you can use [`react-query`](https://tanstack.com/query/v3/) or plain `fetch` if you'd like.
+
+```tsx
+'use client'
+
+import { useNeynar } from 'neynar-next'
+import { FeedResponse, Signer } from 'neynar-next/server'
+import { useCallback } from 'react'
+import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite'
+import LoadingSpinner from '@/components/loading-spinner'
+import CastPage from './cast-page'
+import styles from './casts.module.css'
+
+export default function Casts() {
+  const { signer, isLoading: signerLoading } = useNeynar()
+  const { data, isLoading, error, size, setSize } = useSWRInfinite<
+    FeedResponse,
+    string
+  >(getKey(signer))
+
+  const loadMore = useCallback(
+    () => setSize((current) => current + 1),
+    [setSize],
+  )
+
+  if (signerLoading)
+    return (
+      <div className={styles.container}>
+        <LoadingSpinner />
+      </div>
+    )
+  if (signer?.status !== 'approved') return 'Please sign in to view casts'
+
+  return (
+    <>
+      {data?.map((page, index) =>
+        page.casts.map((cast) => (
+          <div key={cast.hash}>{/* render cast */}</div>
+        )),
+      )}
+      {isLoading && (
+        <div className={styles.container}>
+          <LoadingSpinner />
+        </div>
+      )}
+      {error && <div className={styles.container}>{error}</div>}
+      <button onClick={loadMore}>Load More</button>
+    </>
+  )
+}
+
+const API_URL = '/api/casts'
+
+function getKey(signer: Signer | null): SWRInfiniteKeyLoader<FeedResponse> {
+  return (pageIndex, previousPageData) => {
+    if (signer?.status !== 'approved') return null
+    const params = new URLSearchParams({ fid: signer.fid.toString() })
+
+    if (pageIndex === 0) return `${API_URL}?${params.toString()}`
+
+    if (previousPageData && !previousPageData.next.cursor) return null
+
+    if (previousPageData?.next.cursor)
+      params.set('cursor', previousPageData.next.cursor)
+    return `${API_URL}?${params.toString()}`
+  }
 }
 ```
 

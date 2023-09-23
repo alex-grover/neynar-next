@@ -1,34 +1,18 @@
 import { Hash } from 'viem'
 import { mnemonicToAccount } from 'viem/accounts'
+import { Cast, GeneratedSigner, PendingSigner, Signer } from './types'
 
-type BaseSigner = {
-  signer_uuid: string
-  public_key: Hash
+type Pagination = {
+  cursor?: string
+  limit?: number
 }
 
-type GeneratedSigner = BaseSigner & {
-  status: 'generated'
+export type FeedResponse = {
+  casts: Cast[]
+  next: {
+    cursor: string
+  }
 }
-
-type PendingSigner = BaseSigner & {
-  status: 'pending_approval'
-  signer_approval_url: string
-}
-
-type ApprovedSigner = BaseSigner & {
-  status: 'approved'
-  fid: number
-}
-
-type RevokedSigner = BaseSigner & {
-  status: 'revoked'
-}
-
-export type Signer =
-  | GeneratedSigner
-  | PendingSigner
-  | ApprovedSigner
-  | RevokedSigner
 
 export default class NeynarClient {
   private readonly apiKey: string
@@ -42,34 +26,61 @@ export default class NeynarClient {
   }
 
   async getSigner(signerUuid: string) {
-    const response = await this.get('signer', { signer_uuid: signerUuid })
-    return (await response.json()) as Signer
+    return this.get<Signer>('signer', { signer_uuid: signerUuid })
   }
 
   async createSigner() {
-    const createResponse = await this.post('signer')
-    const generatedSigner = (await createResponse.json()) as GeneratedSigner
+    const generatedSigner = await this.post<GeneratedSigner>('signer')
 
     const { deadline, signature } = await this.generateSignature(
       generatedSigner.public_key,
     )
 
-    const registerResponse = await this.post('signer/signed_key', {
+    return this.post<PendingSigner>('signer/signed_key', {
       signer_uuid: generatedSigner.signer_uuid,
       app_fid: this.fid.toString(),
       deadline,
       signature,
     })
-
-    return (await registerResponse.json()) as PendingSigner
   }
 
-  private get(pathname: string, params: Record<string, string>) {
+  async getFollowingFeed(fid: number, { cursor, limit }: Pagination = {}) {
+    const params: Record<string, string> = {
+      fid: fid.toString(),
+    }
+    if (cursor) params.cursor = cursor
+    if (limit) params.limit = limit.toString()
+
+    return this.get<FeedResponse>('feed', params)
+  }
+
+  async getChannelFeed(parentUrl: string, { cursor, limit }: Pagination = {}) {
+    const params: Record<string, string> = {
+      feed_type: 'filter',
+      filter_type: 'parent_url',
+      parent_url: parentUrl,
+    }
+    if (cursor) params.cursor = cursor
+    if (limit) params.limit = limit.toString()
+
+    return this.get<FeedResponse>('feed', params)
+  }
+
+  private async get<Response>(
+    pathname: string,
+    params: Record<string, string>,
+  ) {
     const searchParams = new URLSearchParams(params)
-    return this.request(`${pathname}?${searchParams.toString()}`)
+    const response = await this.request(
+      `${pathname}?${searchParams.toString()}`,
+    )
+    return (await response.json()) as Response
   }
 
-  private post(pathname: string, body?: Record<string, string | number>) {
+  private async post<Response>(
+    pathname: string,
+    body?: Record<string, string | number>,
+  ) {
     const bodyParams = body
       ? {
           headers: {
@@ -78,7 +89,12 @@ export default class NeynarClient {
           body: JSON.stringify(body),
         }
       : {}
-    return this.request(pathname, { method: 'POST', ...bodyParams })
+    const response = await this.request(pathname, {
+      method: 'POST',
+      ...bodyParams,
+    })
+
+    return (await response.json()) as Response
   }
 
   private request(pathname: string, init?: RequestInit) {
@@ -91,7 +107,7 @@ export default class NeynarClient {
     })
   }
 
-  private async generateSignature(public_key: Hash) {
+  private async generateSignature(publicKey: Hash) {
     const deadline = Math.floor(Date.now() / 1000) + 86400
 
     const signature = await mnemonicToAccount(this.mnemonic).signTypedData({
@@ -100,7 +116,7 @@ export default class NeynarClient {
         version: '1',
         chainId: 10,
         verifyingContract:
-          '0x00000000fc700472606ed4fa22623acf62c60553' as `0x${string}`,
+          '0x00000000fc700472606ed4fa22623acf62c60553' as const,
       },
       types: {
         SignedKeyRequest: [
@@ -112,7 +128,7 @@ export default class NeynarClient {
       primaryType: 'SignedKeyRequest',
       message: {
         requestFid: this.fid,
-        key: public_key,
+        key: publicKey,
         deadline: BigInt(deadline),
       },
     })
