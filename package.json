@@ -20,7 +20,10 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./server": "./dist/server.js"
+  },
   "scripts": {
     "clean": "rm -rf dist",
     "build": "tsup",

@@ -15,7 +15,7 @@ This repo is a work in progress, use at your own risk! Currently, the following 
 ## Installation
 
 ```sh
-npm install neynar-next
+npm install neynar-next viem
 ```
 
 ## Usage
