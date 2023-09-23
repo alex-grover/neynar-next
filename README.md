@@ -121,7 +121,7 @@ export default function LoginButton() {
   const handleClick = useCallback(() => void signIn(), [signIn])
 
   if (isLoading || signer?.status === 'pending_approval')
-    return <button disabled>Loading</button>
+    return <button disabled>Loading</button> // TODO: display QR code
   if (signer === null) return <button onClick={handleClick}>Sign In</button>
   if (signer.status === 'approved')
     return <div>Signed in as FID {signer.fid}</div>
