@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.6](https://github.com/alex-grover/neynar-next/compare/v0.0.5...v0.0.6) (2023-09-23)
+
+
+### Features
+
+* start with initial loading state ([af88fde](https://github.com/alex-grover/neynar-next/commit/af88fde722177104aa73a283239f0c2c4ce67688))
+
 ## [0.0.5](https://github.com/alex-grover/neynar-next/compare/v0.0.4...v0.0.5) (2023-09-23)
 
 
