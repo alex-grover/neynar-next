@@ -74,13 +74,6 @@ export async function GET(request: Request) {
     return new Response('signer_uuid query param is required', { status: 400 })
   const signer = await neynarClient.getSigner(signerUuid)
 
-  // If you also want the user's username + profile, or you can fetch separately
-  // TODO: this is not currently supported by the types
-  if (signer.status === 'approved') {
-    const user = await neynarClient.getUserByFid(signer.fid)
-    return NextResponse.json({ ...signer, user })
-  }
-
   return NextResponse.json(signer)
 }
 
@@ -131,16 +124,25 @@ export default function LoginButton() {
 
   const handleClick = useCallback(() => void signIn(), [signIn])
 
-  if (isLoading || signer?.status === 'pending_approval')
-    return <button disabled>Loading</button> // TODO: display QR code
-  if (signer === null) return <button onClick={handleClick}>Sign In</button>
-  if (signer.status === 'approved')
-    return <div>Signed in as FID {signer.fid}</div>
-  if (signer.status === 'revoked')
-    return <button onClick={handleClick}>Revoked. Sign In Again</button>
-
-  // This should never happen, unless the server fails while registering the signer
-  throw new Error(`Unknown signer status: ${signer.status}`)
+  switch (signer?.status) {
+    case undefined:
+      return <button onClick={handleClick}>Sign In</button>
+    case 'generated':
+      // This should never happen, unless the server fails while registering the signer
+      throw new Error('Unregistered signer')
+    case 'pending_approval':
+      return (
+        <>
+          {/* See below */}
+          <QRCodeModal signer={signer} />
+          <button disabled>Loading</button>
+        </>
+      )
+    case 'approved':
+      return <div>{data?.username}</div>
+    case 'revoked':
+      return <button onClick={handleClick}>Revoked. Sign In Again</button>
+  }
 }
 ```
 
@@ -165,6 +167,52 @@ export default function QRCodeModal() {
 }
 ```
 
+### Fetch user
+
+After signing in, you'll likely want to fetch the user's profile so you can display their username and avatar. To do this, we need to create an API route and then fetch the user from the client:
+
+```ts
+type Props = {
+  params: {
+    fid: string
+  }
+}
+
+export async function GET(request: Request, { params }: Props) {
+  const fid = parseInt(params.fid)
+  if (!fid) return new Response('fid is invalid', { status: 400 })
+
+  const user = await neynarClient.getUserByFid(fid)
+  return NextResponse.json(signer)
+}
+
+export async function POST() {
+  const signer = await neynarClient.createSigner()
+  return NextResponse.json(signer)
+}
+```
+
+This library is agnostic of your client data fetching solution. The example uses [`swr`](https://swr.vercel.app), but you can use [`react-query`](https://tanstack.com/query/v3/) or plain `fetch` if you'd like.
+
+```tsx
+'use client'
+
+import { type User } from 'neynar-next/server'
+import useSWRImmutable from 'swr/immutable'
+
+export default function UserProfile() {
+  const { signer } = useSigner()
+
+  const { data } = useSWRImmutable<User, string>(
+    signer?.status === 'approved' ? `/api/users/${signer.fid}` : null,
+  )
+
+  if (!data) return null
+
+  return <div>{data.username}</div>
+}
+```
+
 ### Fetch feed
 
 Add the API to your server:
@@ -184,7 +232,7 @@ export async function GET(request: Request) {
 }
 ```
 
-Then, hit the API from your client. This library is agnostic of your data fetching solution. The example uses [`swr`](https://swr.vercel.app), but you can use [`react-query`](https://tanstack.com/query/v3/) or plain `fetch` if you'd like.
+Then, hit the API from your client:
 
 ```tsx
 'use client'

@@ -45,11 +45,12 @@ export default class NeynarClient {
   }
 
   async getUserByFid(fid: number) {
-    return this.get<{ result: { user: User } }>(
+    const response = await this.get<{ result: { user: User } }>(
       'user',
       { fid: fid.toString() },
       1,
     )
+    return response.result.user
   }
 
   async getFollowingFeed(fid: number, { cursor, limit }: Pagination = {}) {
