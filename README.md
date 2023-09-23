@@ -2,6 +2,16 @@
 
 Create Farcaster apps with Next.js and Neynar
 
+### Features
+
+This repo is a work in progress, use at your own risk! Currently, the following features are supported:
+
+- [x] Sign in
+- [ ] Read/write casts
+- [ ] Search users
+- [ ] Follow/unfollow
+- [ ] Cast reactions
+
 ## Installation
 
 ```sh
