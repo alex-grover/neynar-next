@@ -1,4 +1,7 @@
 {
   "extends": "@tsconfig/next/tsconfig.json",
+  "compilerOptions": {
+    "incremental": false
+  },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
