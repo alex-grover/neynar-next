@@ -1,5 +1,3 @@
-'use client'
-
 import { PropsWithChildren, useCallback, useEffect, useState } from 'react'
 import { type Signer } from '../server'
 import NeynarContext from './NeynarContext'
