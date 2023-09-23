@@ -13,16 +13,20 @@ export default function NeynarProvider({
   api = '/api/signer',
   children,
 }: NeynarProviderProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [signer, setSigner] = useState<Signer | null>(null)
 
   // Load existing user upon page load
   useEffect(() => {
     const storedData = localStorage.getItem(STORAGE_KEY)
-    if (!storedData) return
+    if (!storedData) {
+      setIsLoading(false)
+      return
+    }
     // TODO: validate stored data shape
     const signer = JSON.parse(storedData) as Signer
     setSigner(signer)
+    setIsLoading(false)
   }, [])
 
   // Poll for updates while signer is in pending status

@@ -112,17 +112,17 @@ Then, use the hook in your app:
 ```tsx
 'use client'
 
-import { useCallback } from 'react'
 import { useNeynar } from 'neynar-next'
+import { useCallback } from 'react'
 
 export default function LoginButton() {
   const { signer, isLoading, signIn } = useNeynar()
 
   const handleClick = useCallback(() => void signIn(), [signIn])
 
-  if (signer === null) return <button onClick={handleClick}>Sign In</button>
-  if (isLoading || signer.status === 'pending_approval')
+  if (isLoading || signer?.status === 'pending_approval')
     return <button disabled>Loading</button>
+  if (signer === null) return <button onClick={handleClick}>Sign In</button>
   if (signer.status === 'approved')
     return <div>Signed in as FID {signer.fid}</div>
   if (signer.status === 'revoked')

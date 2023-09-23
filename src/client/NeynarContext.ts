@@ -14,7 +14,7 @@ async function notInitialized() {
 
 const NeynarContext = createContext<NeynarContextType>({
   signer: null,
-  isLoading: false,
+  isLoading: true,
   signIn: notInitialized,
 })
 
