@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.4](https://github.com/alex-grover/neynar-next/compare/v0.0.3...v0.0.4) (2023-09-23)
+
+
+### Bug Fixes
+
+* add client directive to index file ([056212c](https://github.com/alex-grover/neynar-next/commit/056212c9723a8eb87264899e542e5cd13cadb4b4))
+
 ## [0.0.3](https://github.com/alex-grover/neynar-next/compare/v0.0.2...v0.0.3) (2023-09-23)
 
 
