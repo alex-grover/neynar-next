@@ -73,6 +73,13 @@ export async function GET(request: Request) {
   if (!signerUuid)
     return new Response('signer_uuid query param is required', { status: 400 })
   const signer = await neynarClient.getSigner(signerUuid)
+
+  // If you also want the user's username + profile, or you can fetch separately
+  if (signer.status === 'approved') {
+    const user = await neynarClient.getUserByFid(signer.fid)
+    return NextResponse.json({ ...signer, user })
+  }
+
   return NextResponse.json(signer)
 }
 

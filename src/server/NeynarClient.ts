@@ -1,6 +1,6 @@
 import { Hash } from 'viem'
 import { mnemonicToAccount } from 'viem/accounts'
-import { Cast, GeneratedSigner, PendingSigner, Signer } from './types'
+import { Cast, GeneratedSigner, PendingSigner, Signer, User } from './types'
 
 type Pagination = {
   cursor?: string
@@ -44,6 +44,14 @@ export default class NeynarClient {
     })
   }
 
+  async getUserByFid(fid: number) {
+    return this.get<{ result: { user: User } }>(
+      'user',
+      { fid: fid.toString() },
+      1,
+    )
+  }
+
   async getFollowingFeed(fid: number, { cursor, limit }: Pagination = {}) {
     const params: Record<string, string> = {
       fid: fid.toString(),
@@ -69,10 +77,12 @@ export default class NeynarClient {
   private async get<Response>(
     pathname: string,
     params: Record<string, string>,
+    version: 1 | 2 = 2,
   ) {
     const searchParams = new URLSearchParams(params)
     const response = await this.request(
       `${pathname}?${searchParams.toString()}`,
+      version,
     )
     return (await response.json()) as Response
   }
@@ -89,7 +99,7 @@ export default class NeynarClient {
           body: JSON.stringify(body),
         }
       : {}
-    const response = await this.request(pathname, {
+    const response = await this.request(pathname, 2, {
       method: 'POST',
       ...bodyParams,
     })
@@ -97,8 +107,8 @@ export default class NeynarClient {
     return (await response.json()) as Response
   }
 
-  private request(pathname: string, init?: RequestInit) {
-    return fetch(`https://api.neynar.com/v2/farcaster/${pathname}`, {
+  private request(pathname: string, version: 1 | 2, init?: RequestInit) {
+    return fetch(`https://api.neynar.com/v${version}/farcaster/${pathname}`, {
       ...init,
       headers: {
         ...init?.headers,
