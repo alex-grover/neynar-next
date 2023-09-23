@@ -66,7 +66,10 @@ import { neynarClient } from '@/lib/neynar'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const signer = await neynarClient.getSigner(searchParams.get('signer_uuid'))
+  const signerUuid = searchParams.get('signer_uuid')
+  if (!signerUuid)
+    return new Response('signer_uuid query param is required', { status: 400 })
+  const signer = await neynarClient.getSigner(signerUuid)
   return NextResponse.json(signer)
 }
 
