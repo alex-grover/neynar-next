@@ -39,7 +39,10 @@ export default function NeynarProvider({
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       intervalId = setInterval(async () => {
         // TODO: allow customizing how params are passed
-        const response = await fetch(`${api}?signer_uuid=${signer.signer_uuid}`)
+        const searchParams = new URLSearchParams({
+          signer_uuid: signer.signer_uuid,
+        })
+        const response = await fetch(`${api}?${searchParams.toString()}`)
 
         const updatedSigner = (await response.json()) as Signer
         if (updatedSigner.status !== 'approved') return
