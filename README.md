@@ -213,6 +213,27 @@ export default function UserProfile() {
 }
 ```
 
+After the user clicks the sign in button, you'll need to render a QR code so they can add the signer from the Warpcast mobile app. You can do this with a package like [`react-qr-code`](https://github.com/rosskhanas/react-qr-code):
+
+```tsx
+'use client'
+
+import { useSigner } from 'neynar-next'
+import QRCode from 'react-qr-code'
+
+export default function QRCodeModal() {
+  const { signer } = useSigner()
+
+  if (signer?.status !== 'pending_approval') return null
+
+  return (
+    <div className="modal">
+      <QRCode value={signer.signer_approval_url} />
+    </div>
+  )
+}
+```
+
 ### Fetch feed
 
 Add the API to your server:
