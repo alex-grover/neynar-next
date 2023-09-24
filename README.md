@@ -223,11 +223,6 @@ export async function GET(request: Request, { params }: Props) {
   const user = await neynarClient.getUserByFid(fid)
   return NextResponse.json(signer)
 }
-
-export async function POST() {
-  const signer = await neynarClient.createSigner()
-  return NextResponse.json(signer)
-}
 ```
 
 This library is agnostic of your client data fetching solution. The example uses [`swr`](https://swr.vercel.app), but you can use [`react-query`](https://tanstack.com/query/v3/) or plain `fetch` if you'd like.
