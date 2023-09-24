@@ -8,11 +8,11 @@ This repo is a work in progress, use at your own risk! Currently, the following 
 
 - [x] Sign in
 - [x] Get user profile by FID
-- [x] Fetch feed
+- [x] Fetch feed by following/channel/FID list
+- [x] Cast reactions (like/unlike/recast/unrecast)
 - [ ] Read/write casts
 - [ ] Search users
 - [ ] Follow/unfollow
-- [ ] Cast reactions
 
 ## Installation
 
