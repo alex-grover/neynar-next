@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/alex-grover/neynar-next/compare/v0.1.1...v0.1.2) (2023-09-24)
+
+
+### Features
+
+* add feed by fid list fetching ([2ea672d](https://github.com/alex-grover/neynar-next/commit/2ea672d87a39526b1831644e709176d35ee10630))
+
 ## [0.1.1](https://github.com/alex-grover/neynar-next/compare/v0.1.0...v0.1.1) (2023-09-23)
 
 
