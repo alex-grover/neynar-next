@@ -25,7 +25,7 @@ export default class NeynarClient {
     this.mnemonic = mnemonic
   }
 
-  async getSigner(signerUuid: string) {
+  getSigner(signerUuid: string) {
     const params = new URLSearchParams({ signer_uuid: signerUuid })
     return this.get<Signer>('signer', params)
   }
@@ -55,7 +55,7 @@ export default class NeynarClient {
     return response.result.user
   }
 
-  async getFollowingFeed(fid: number, { cursor, limit }: Pagination = {}) {
+  getFollowingFeed(fid: number, { cursor, limit }: Pagination = {}) {
     const params = new URLSearchParams({
       fid: fid.toString(),
     })
@@ -65,7 +65,7 @@ export default class NeynarClient {
     return this.get<FeedResponse>('feed', params)
   }
 
-  async getChannelFeed(parentUrl: string, { cursor, limit }: Pagination = {}) {
+  getChannelFeed(parentUrl: string, { cursor, limit }: Pagination = {}) {
     const params = new URLSearchParams({
       feed_type: 'filter',
       filter_type: 'parent_url',
@@ -77,7 +77,7 @@ export default class NeynarClient {
     return this.get<FeedResponse>('feed', params)
   }
 
-  async getFeedForFids(fids: number[], { cursor, limit }: Pagination = {}) {
+  getFeedForFids(fids: number[], { cursor, limit }: Pagination = {}) {
     const params = new URLSearchParams({
       feed_type: 'filter',
       filter_type: 'fids',
@@ -89,6 +89,38 @@ export default class NeynarClient {
     if (limit) params.set('limit', limit.toString())
 
     return this.get<FeedResponse>('feed', params)
+  }
+
+  likeCast(signerUuid: string, hash: Hash) {
+    return this.post('reaction', {
+      signer_uuid: signerUuid,
+      target: hash,
+      reaction_type: 'like',
+    })
+  }
+
+  unlikeCast(signerUuid: string, hash: Hash) {
+    return this.delete('reaction', {
+      signer_uuid: signerUuid,
+      target: hash,
+      reaction_type: 'like',
+    })
+  }
+
+  recastCast(signerUuid: string, hash: Hash) {
+    return this.post('reaction', {
+      signer_uuid: signerUuid,
+      target: hash,
+      reaction_type: 'recast',
+    })
+  }
+
+  unrecastCast(signerUuid: string, hash: Hash) {
+    return this.delete('reaction', {
+      signer_uuid: signerUuid,
+      target: hash,
+      reaction_type: 'recast',
+    })
   }
 
   private async get<Response>(
@@ -117,6 +149,26 @@ export default class NeynarClient {
       : {}
     const response = await this.request(pathname, 2, {
       method: 'POST',
+      ...bodyParams,
+    })
+
+    return (await response.json()) as Response
+  }
+
+  private async delete<Response>(
+    pathname: string,
+    body?: Record<string, string | number>,
+  ) {
+    const bodyParams = body
+      ? {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        }
+      : {}
+    const response = await this.request(pathname, 2, {
+      method: 'DELETE',
       ...bodyParams,
     })
 

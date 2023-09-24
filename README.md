@@ -285,9 +285,6 @@ import { useSigner } from 'neynar-next'
 import { FeedResponse, Signer } from 'neynar-next/server'
 import { useCallback } from 'react'
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite'
-import LoadingSpinner from '@/components/loading-spinner'
-import CastPage from './cast-page'
-import styles from './casts.module.css'
 
 export default function Casts() {
   const { signer, isLoading: signerLoading } = useSigner()
@@ -301,12 +298,7 @@ export default function Casts() {
     [setSize],
   )
 
-  if (signerLoading)
-    return (
-      <div className={styles.container}>
-        <LoadingSpinner />
-      </div>
-    )
+  if (signerLoading) return 'Loading'
   if (signer?.status !== 'approved') return 'Please sign in to view casts'
 
   return (
@@ -316,12 +308,8 @@ export default function Casts() {
           <div key={cast.hash}>{/* render cast */}</div>
         )),
       )}
-      {isLoading && (
-        <div className={styles.container}>
-          <LoadingSpinner />
-        </div>
-      )}
-      {error && <div className={styles.container}>{error}</div>}
+      {isLoading && 'Loading'}
+      {error && <div>{error}</div>}
       <button onClick={loadMore}>Load More</button>
     </>
   )
@@ -342,6 +330,71 @@ function getKey(signer: Signer | null): SWRInfiniteKeyLoader<FeedResponse> {
       params.set('cursor', previousPageData.next.cursor)
     return `${API_URL}?${params.toString()}`
   }
+}
+```
+
+</details>
+
+<details>
+<summary>React to cast (like, unlike, recast, undo recast)</summary>
+
+Add the API to your server:
+
+```ts
+// app/api/casts/[hash]/{like,recast}/route.ts
+
+import { NextResponse } from 'next/server'
+import neynarClient from '@/lib/neynar'
+
+type Props = {
+  params: {
+    hash: string
+  }
+}
+
+export async function POST(request: Request, { params }: Props) {
+  const searchParams = new URLSearchParams(request.url)
+  await neynarClient.likeCast(searchParams.get('signerUuid'), params.hash)
+  // await neynarClient.recastCast(searchParams.get('signerUuid'), params.hash)
+  return NextResponse.json({}, { status: 201 })
+}
+
+export async function DELETE(request: Request, { params }: Props) {
+  const searchParams = new URLSearchParams(request.url)
+  await neynarClient.unlikeCast(searchParams.get('signerUuid'), params.hash)
+  // await neynarClient.unrecastCast(searchParams.get('signerUuid'), params.hash)
+  return NextResponse.json({}, { status: 204 })
+}
+```
+
+Then, hit the API from your client:
+
+```tsx
+'use client'
+
+import { useSigner } from 'neynar-next'
+
+type LikeButtonProps = {
+  cast: {
+    hash: string
+  }
+}
+
+export default function LikeButton({ cast }: LikeButtonProps) {
+  const { signer } = useSigner()
+
+  return (
+    <button
+      disabled={signer?.status !== 'approved' || isMutating}
+      onClick={() =>
+        fetch(`/api/casts/${cast.hash}/like?signerUuid=${signer.signer_uuid}`, {
+          method: 'POST',
+        })
+      }
+    >
+      Like
+    </button>
+  )
 }
 ```
 
