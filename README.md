@@ -254,7 +254,7 @@ export default function UserProfile() {
 </details>
 
 <details>
-<summary>Fetch feed</summary>
+<summary>Fetch feed for user/channel/list of users</summary>
 
 Add the API to your server:
 
@@ -269,6 +269,9 @@ export async function GET(request: Request) {
   const fid = parseInt(searchParams.get('fid'))
   if (!fid) return new Response('fid query param is required', { status: 400 })
   const feed = await neynarClient.getFollowingFeed(fid)
+  // Or you can get the feed for a channel/specific list of users:
+  // const feed = await neynarClient.getChannelFeed(fid)
+  // const feed = await neynarClient.getFeedForFids([10259]) // There seems to be a bug on the Neynar end where this fails with more than 1 FID
   return NextResponse.json(feed)
 }
 ```
