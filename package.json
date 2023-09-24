@@ -1,7 +1,7 @@
 {
   "name": "neynar-next",
   "description": "Create Farcaster apps with Next.js and Neynar",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "Alex Grover <hello@alexgrover.me> (https://alexgrover.me)",
   "license": "MIT",
   "repository": {

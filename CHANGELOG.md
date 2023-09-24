@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/alex-grover/neynar-next/compare/v0.1.2...v0.1.3) (2023-09-24)
+
+
+### Features
+
+* add reaction methods ([0ccefc7](https://github.com/alex-grover/neynar-next/commit/0ccefc7549b57ed809ce25f0e04d2164797ec765))
+
 ## [0.1.2](https://github.com/alex-grover/neynar-next/compare/v0.1.1...v0.1.2) (2023-09-24)
 
 
