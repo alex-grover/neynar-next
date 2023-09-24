@@ -1,6 +1,13 @@
 import { Hash } from 'viem'
 import { mnemonicToAccount } from 'viem/accounts'
-import { Cast, GeneratedSigner, PendingSigner, Signer, User } from './types'
+import {
+  Cast,
+  GeneratedSigner,
+  PendingSigner,
+  Signer,
+  User,
+  UserWithViewerContext,
+} from './types'
 
 type Pagination = {
   cursor?: string
@@ -45,13 +52,14 @@ export default class NeynarClient {
     })
   }
 
-  async getUserByFid(fid: number) {
+  getUserByFid(fid: number, viewer?: null): Promise<User>
+  getUserByFid(fid: number, viewer: number): Promise<UserWithViewerContext>
+  async getUserByFid(fid: number, viewer?: number | null) {
     const params = new URLSearchParams({ fid: fid.toString() })
-    const response = await this.get<{ result: { user: User } }>(
-      'user',
-      params,
-      1,
-    )
+    if (viewer) params.set('viewerFid', viewer.toString())
+    const response = await this.get<{
+      result: { user: User | UserWithViewerContext }
+    }>('user', params, 1)
     return response.result.user
   }
 

@@ -220,7 +220,11 @@ export async function GET(request: Request, { params }: Props) {
   const fid = parseInt(params.fid)
   if (!fid) return new Response('fid is invalid', { status: 400 })
 
-  const user = await neynarClient.getUserByFid(fid)
+  // You can pass an optional viewer FID to get back the mutual following status as well, for example to display on another user's profile page
+  // const { searchParams } = new URL(request.url)
+  // const viewer = searchParams.get('viewer')
+
+  const user = await neynarClient.getUserByFid(fid /*, viewer */)
   return NextResponse.json(signer)
 }
 ```

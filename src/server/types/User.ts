@@ -17,9 +17,10 @@ export type User = {
   followingCount: number
   verifications: Hash[]
   activeStatus: 'active' | 'inactive'
+}
 
-  // Only returned if you pass `viewerFid`
-  viewerContext?: {
+export type UserWithViewerContext = User & {
+  viewerContext: {
     following: boolean
     followedBy: boolean
   }
