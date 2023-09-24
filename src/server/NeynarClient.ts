@@ -26,7 +26,8 @@ export default class NeynarClient {
   }
 
   async getSigner(signerUuid: string) {
-    return this.get<Signer>('signer', { signer_uuid: signerUuid })
+    const params = new URLSearchParams({ signer_uuid: signerUuid })
+    return this.get<Signer>('signer', params)
   }
 
   async createSigner() {
@@ -45,44 +46,58 @@ export default class NeynarClient {
   }
 
   async getUserByFid(fid: number) {
+    const params = new URLSearchParams({ fid: fid.toString() })
     const response = await this.get<{ result: { user: User } }>(
       'user',
-      { fid: fid.toString() },
+      params,
       1,
     )
     return response.result.user
   }
 
   async getFollowingFeed(fid: number, { cursor, limit }: Pagination = {}) {
-    const params: Record<string, string> = {
+    const params = new URLSearchParams({
       fid: fid.toString(),
-    }
-    if (cursor) params.cursor = cursor
-    if (limit) params.limit = limit.toString()
+    })
+    if (cursor) params.set('cursor', cursor)
+    if (limit) params.set('limit', limit.toString())
 
     return this.get<FeedResponse>('feed', params)
   }
 
   async getChannelFeed(parentUrl: string, { cursor, limit }: Pagination = {}) {
-    const params: Record<string, string> = {
+    const params = new URLSearchParams({
       feed_type: 'filter',
       filter_type: 'parent_url',
       parent_url: parentUrl,
-    }
-    if (cursor) params.cursor = cursor
-    if (limit) params.limit = limit.toString()
+    })
+    if (cursor) params.set('cursor', cursor)
+    if (limit) params.set('limit', limit.toString())
+
+    return this.get<FeedResponse>('feed', params)
+  }
+
+  async getFeedForFids(fids: number[], { cursor, limit }: Pagination = {}) {
+    const params = new URLSearchParams({
+      feed_type: 'filter',
+      filter_type: 'fids',
+    })
+    fids.forEach((fid) => {
+      params.append('fids', fid.toString())
+    })
+    if (cursor) params.set('cursor', cursor)
+    if (limit) params.set('limit', limit.toString())
 
     return this.get<FeedResponse>('feed', params)
   }
 
   private async get<Response>(
     pathname: string,
-    params: Record<string, string>,
+    params: URLSearchParams,
     version: 1 | 2 = 2,
   ) {
-    const searchParams = new URLSearchParams(params)
     const response = await this.request(
-      `${pathname}?${searchParams.toString()}`,
+      `${pathname}?${params.toString()}`,
       version,
     )
     return (await response.json()) as Response
