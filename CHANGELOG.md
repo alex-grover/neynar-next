@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.0](https://github.com/alex-grover/neynar-next/compare/v0.1.3...v0.2.0) (2023-09-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* The return type of `getUserByFid` no longer contains the `viewerContext` field unless the `viewer` parameter is passed.
+
+### Features
+
+* allow passing viewer FID to user API ([b10e6bf](https://github.com/alex-grover/neynar-next/commit/b10e6bfad311a0e1cefa77b7f51e6e3a03be15ba))
+
 ## [0.1.3](https://github.com/alex-grover/neynar-next/compare/v0.1.2...v0.1.3) (2023-09-24)
 
 
