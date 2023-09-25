@@ -22,6 +22,10 @@ npm install neynar-next viem
 
 ## Usage
 
+This library has 2 parts: a client-side context/provider to manage the signer, and a server class that simplifies making requests to Neynar.
+
+It's necessary to run Neynar API requests through your own server in order to keep your API key secret. However, beyond proxying requests from your frontend, the server implementation is quite lightweight. It's designed to be compatible with the Next.js Edge runtime to minimize any latency to the user.
+
 <details>
 <summary>Sign in</summary>
 
@@ -71,6 +75,8 @@ The client passes a query param of `?signer_uuid=XXX` and expects a Signer objec
 
 import { NextResponse } from 'next/server'
 import { neynarClient } from '@/lib/neynar'
+
+export const runtime = 'edge'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
