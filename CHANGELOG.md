@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/alex-grover/neynar-next/compare/v0.2.1...v0.2.2) (2023-09-26)
+
+
+### Features
+
+* allow casting with embeds and parent ([f5aadda](https://github.com/alex-grover/neynar-next/commit/f5aadda29c4185757980d1b562d3828466d1d9e4))
+
 ## [0.2.1](https://github.com/alex-grover/neynar-next/compare/v0.2.0...v0.2.1) (2023-09-26)
 
 
