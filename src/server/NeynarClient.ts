@@ -103,18 +103,17 @@ export default class NeynarClient {
     return this.get<FeedResponse>('feed', params)
   }
 
-  // TODO: validate format of extra parameters
   postCast(
     signerUuid: string,
     text: string,
-    // extra?: { embeds?: { url: string }[]; parent?: string },
+    extra?: { embeds?: { url: string }[]; parent?: string },
   ) {
     const params: Json = {
       signer_uuid: signerUuid,
       text,
     }
-    // if (extra?.embeds) params.embeds = extra.embeds
-    // if (extra?.parent) params.parent = extra.parent
+    if (extra?.embeds) params.embeds = extra.embeds
+    if (extra?.parent) params.parent = extra.parent
     return this.post('cast', params)
   }
 

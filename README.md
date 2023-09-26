@@ -9,7 +9,7 @@ This repo is a work in progress, use at your own risk! Currently, the following 
 - [x] Sign in
 - [x] Get user profile by FID
 - [x] Fetch feed by following/channel/FID list
-- [x] Post casts (currently limited to text without embeds or channels)
+- [x] Post casts
 - [x] Cast reactions (like/unlike/recast/unrecast)
 - [ ] Search users
 - [ ] Follow/unfollow
@@ -355,7 +355,11 @@ export async function POST(request: Request) {
 
   const data = Object.fromEntries((await request.formData()).entries())
   if (!data.text) const { signerUuid, text } = parseResult.data
-  await neynarClient.postCast(signerUuid, text)
+  await neynarClient.postCast(
+    signerUuid,
+    text,
+    // { embeds: [{ url: '' }], parent: '' }
+  )
 
   return NextResponse.json({}, { status: 201 })
 }
