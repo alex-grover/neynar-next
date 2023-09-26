@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/alex-grover/neynar-next/compare/v0.2.0...v0.2.1) (2023-09-26)
+
+
+### Features
+
+* post and delete casts ([d1cc4e3](https://github.com/alex-grover/neynar-next/commit/d1cc4e35d7ac5633b2cb533d72f3bd625c8f0e2d))
+
 ## [0.2.0](https://github.com/alex-grover/neynar-next/compare/v0.1.3...v0.2.0) (2023-09-24)
 
 
