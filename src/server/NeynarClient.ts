@@ -21,6 +21,10 @@ export type FeedResponse = {
   }
 }
 
+// Abbreviated type definition, just covering the cases we're using
+type JsonValue = string | number | null
+type Json = Record<string, JsonValue | JsonValue[] | Json[]>
+
 export default class NeynarClient {
   private readonly apiKey: string
   private readonly fid: bigint
@@ -99,6 +103,25 @@ export default class NeynarClient {
     return this.get<FeedResponse>('feed', params)
   }
 
+  // TODO: validate format of extra parameters
+  postCast(
+    signerUuid: string,
+    text: string,
+    // extra?: { embeds?: { url: string }[]; parent?: string },
+  ) {
+    const params: Json = {
+      signer_uuid: signerUuid,
+      text,
+    }
+    // if (extra?.embeds) params.embeds = extra.embeds
+    // if (extra?.parent) params.parent = extra.parent
+    return this.post('cast', params)
+  }
+
+  deleteCast(signerUuid: string, hash: Hash) {
+    return this.delete('cast', { signer_uuid: signerUuid, target_hash: hash })
+  }
+
   likeCast(signerUuid: string, hash: Hash) {
     return this.post('reaction', {
       signer_uuid: signerUuid,
@@ -143,10 +166,7 @@ export default class NeynarClient {
     return (await response.json()) as Response
   }
 
-  private async post<Response>(
-    pathname: string,
-    body?: Record<string, string | number>,
-  ) {
+  private async post<Response>(pathname: string, body?: Json) {
     const bodyParams = body
       ? {
           headers: {

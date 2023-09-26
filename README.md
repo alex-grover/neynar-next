@@ -9,8 +9,8 @@ This repo is a work in progress, use at your own risk! Currently, the following 
 - [x] Sign in
 - [x] Get user profile by FID
 - [x] Fetch feed by following/channel/FID list
+- [x] Post casts (currently limited to text without embeds or channels)
 - [x] Cast reactions (like/unlike/recast/unrecast)
-- [ ] Read/write casts
 - [ ] Search users
 - [ ] Follow/unfollow
 
@@ -335,6 +335,65 @@ function getKey(signer: Signer | null): SWRInfiniteKeyLoader<FeedResponse> {
       params.set('cursor', previousPageData.next.cursor)
     return `${API_URL}?${params.toString()}`
   }
+}
+```
+
+</details>
+
+<details>
+<summary>Post or delete a cast</summary>
+
+Add the API to your server:
+
+```ts
+// app/api/casts/route.ts
+
+export async function POST(request: Request) {
+  const { searchParams } = new URL(request.url)
+  if (!searchParams.get('signerUuid'))
+    return new Response('signerUuid query param is required', { status: 400 })
+
+  const data = Object.fromEntries((await request.formData()).entries())
+  if (!data.text) const { signerUuid, text } = parseResult.data
+  await neynarClient.postCast(signerUuid, text)
+
+  return NextResponse.json({}, { status: 201 })
+}
+
+// To delete a cast, use the same approach with `neynarClient.deleteCast(signerUuid, castHash)`
+```
+
+Then, hit the API from your client:
+
+```tsx
+'use client'
+
+import { useSigner } from 'neynar-next'
+
+export default function CastForm() {
+  const { signer } = useSigner()
+
+  const handleSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault()
+
+      if (signer?.status !== 'approved') return
+
+      const params = new URLSearchParams({ signerUuid: arg.signer.signer_uuid })
+      void fetch(`/api/casts?${params.toString()}`, {
+        method: 'POST',
+        body: new FormData(event.currentTarget),
+      })
+    },
+    [signer, trigger],
+  )
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <textarea name="text" />
+      <button type="submit">Post</button>
+    </form>
+  )
 }
 ```
 
