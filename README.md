@@ -16,6 +16,18 @@ This repo is a work in progress, use at your own risk! Currently, the following 
 
 ## Installation
 
+### Quick Start
+
+To quickly scaffold a project with a simple feed and cast posting functionality:
+
+```shell
+npx degit alex-grover/neynar-next/example my-farcaster-app
+```
+
+All you need to do is add your FID, Farcaster mnemonic, and Neynar API key to the project's .env and you'll be up and running!
+
+### Manual Installation
+
 ```sh
 npm install neynar-next viem
 ```
