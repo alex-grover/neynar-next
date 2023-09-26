@@ -58,7 +58,7 @@ import NeynarClient from 'neynar-next/server'
 
 const neynarClient = new NeynarClient(
   process.env.NEYNAR_API_KEY!,
-  process.env.FARCASTER_FID!,
+  BigInt(process.env.FARCASTER_FID!),
   process.env.FARCASTER_MNEMONIC!,
 )
 
@@ -165,6 +165,8 @@ export default function LoginButton() {
 
   const handleClick = useCallback(() => void signIn(), [signIn])
 
+  if (isLoading) return 'Loading...'
+
   switch (signer?.status) {
     case undefined:
       return <button onClick={handleClick}>Sign In</button>
@@ -180,7 +182,7 @@ export default function LoginButton() {
         </>
       )
     case 'approved':
-      return <div>{data?.username}</div>
+      return <div>Signed in as FID {signer?.fid}</div>
     case 'revoked':
       return <button onClick={handleClick}>Revoked. Sign In Again</button>
   }

@@ -94,7 +94,8 @@
     }
   },
   "eslintIgnore": [
-    "dist"
+    "dist",
+    "example"
   ],
   "prettier": "@alex-grover/prettier-config",
   "config": {
