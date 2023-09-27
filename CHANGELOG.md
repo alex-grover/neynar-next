@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/alex-grover/neynar-next/compare/v0.2.2...v0.2.3) (2023-09-27)
+
+
+### Features
+
+* get user by username ([b63edb2](https://github.com/alex-grover/neynar-next/commit/b63edb220facc1f440b0e932ffd5478b3415c607))
+
 ## [0.2.2](https://github.com/alex-grover/neynar-next/compare/v0.2.1...v0.2.2) (2023-09-26)
 
 
