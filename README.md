@@ -7,7 +7,7 @@ Create Farcaster apps with Neynar. Built with Next.js in mind, but works with an
 This repo is a work in progress, use at your own risk! Currently, the following features are supported:
 
 - [x] Sign in
-- [x] Get user profile by FID
+- [x] Get user profile by FID or username
 - [x] Fetch feed by following/channel/FID list
 - [x] Post casts
 - [x] Cast reactions (like/unlike/recast/unrecast)
@@ -245,6 +245,8 @@ export async function GET(request: Request, { params }: Props) {
   // const viewer = searchParams.get('viewer')
 
   const user = await neynarClient.getUserByFid(fid /*, viewer */)
+  // Or fetch by username
+  // await neynarClient.getUserByUsername('alexgrover.eth' /*, viewer */)
   return NextResponse.json(signer)
 }
 ```

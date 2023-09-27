@@ -67,6 +67,20 @@ export default class NeynarClient {
     return response.result.user
   }
 
+  getUserByUsername(username: string, viewer?: null): Promise<User>
+  getUserByUsername(
+    username: string,
+    viewer: number,
+  ): Promise<UserWithViewerContext>
+  async getUserByUsername(username: string, viewer?: number | null) {
+    const params = new URLSearchParams({ username })
+    if (viewer) params.set('viewerFid', viewer.toString())
+    const response = await this.get<{
+      result: { user: User | UserWithViewerContext }
+    }>('user-by-username', params, 1)
+    return response.result.user
+  }
+
   getFollowingFeed(fid: number, { cursor, limit }: Pagination = {}) {
     const params = new URLSearchParams({
       fid: fid.toString(),
