@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/alex-grover/neynar-next/compare/v0.2.3...v0.2.4) (2023-09-27)
+
+
+### Bug Fixes
+
+* don't hardcode reply count ([16a2031](https://github.com/alex-grover/neynar-next/commit/16a203159d396258c2fe867fb09bc6fa4d83eec4))
+
 ## [0.2.3](https://github.com/alex-grover/neynar-next/compare/v0.2.2...v0.2.3) (2023-09-27)
 
 
