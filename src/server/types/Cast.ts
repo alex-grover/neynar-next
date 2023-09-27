@@ -31,7 +31,7 @@ export type Cast = {
     recasts: Recast[]
   }
   replies: {
-    count: 2
+    count: number
   }
 }
 
