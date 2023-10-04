@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5](https://github.com/alex-grover/neynar-next/compare/v0.2.4...v0.2.5) (2023-10-04)
+
+
+### Features
+
+* add type to post cast ([8bc3f84](https://github.com/alex-grover/neynar-next/commit/8bc3f84933f9d54b4e2739b3c2c38c3592c749fe))
+
 ## [0.2.4](https://github.com/alex-grover/neynar-next/compare/v0.2.3...v0.2.4) (2023-09-27)
 
 
