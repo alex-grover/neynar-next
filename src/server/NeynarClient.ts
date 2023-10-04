@@ -21,6 +21,16 @@ export type FeedResponse = {
   }
 }
 
+// TODO: type non-success responses
+export type PostCastResponse = {
+  success: true
+  cast: {
+    hash: Hash
+    author: { fid: number }
+    text: string
+  }
+}
+
 // Abbreviated type definition, just covering the cases we're using
 type JsonValue = string | number | null
 type Json = Record<string, JsonValue | JsonValue[] | Json[]>
@@ -128,7 +138,7 @@ export default class NeynarClient {
     }
     if (extra?.embeds) params.embeds = extra.embeds
     if (extra?.parent) params.parent = extra.parent
-    return this.post('cast', params)
+    return this.post<PostCastResponse>('cast', params)
   }
 
   deleteCast(signerUuid: string, hash: Hash) {
