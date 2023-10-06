@@ -117,9 +117,7 @@ export default class NeynarClient {
     const params = new URLSearchParams({
       feed_type: 'filter',
       filter_type: 'fids',
-    })
-    fids.forEach((fid) => {
-      params.append('fids', fid.toString())
+      fids: fids.join(','),
     })
     if (cursor) params.set('cursor', cursor)
     if (limit) params.set('limit', limit.toString())
