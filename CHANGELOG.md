@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.6](https://github.com/alex-grover/neynar-next/compare/v0.2.5...v0.2.6) (2023-10-06)
+
+
+### Bug Fixes
+
+* use compatible fid list query param format ([f206751](https://github.com/alex-grover/neynar-next/commit/f2067511383c756ae3c82b20613f9800b606378a))
+
 ## [0.2.5](https://github.com/alex-grover/neynar-next/compare/v0.2.4...v0.2.5) (2023-10-04)
 
 
