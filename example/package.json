@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "next": "latest",
-    "neynar-next": "latest",
+    "neynar-next": "file:..",
     "react": "latest",
     "react-dom": "latest",
     "react-qr-code": "^2.0.12",
