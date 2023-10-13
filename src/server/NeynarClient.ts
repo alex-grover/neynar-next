@@ -2,6 +2,7 @@ import { Hash } from 'viem'
 import { mnemonicToAccount } from 'viem/accounts'
 import {
   Cast,
+  CastWithViewerContext,
   GeneratedSigner,
   PendingSigner,
   Signer,
@@ -128,6 +129,22 @@ export default class NeynarClient {
   getCast(type: 'url' | 'hash', identifier: string) {
     const params = new URLSearchParams({ type, identifier })
     return this.get<{ cast: Cast }>('cast', params)
+  }
+
+  getCastsInThread(
+    threadHash: string,
+    viewer?: null,
+  ): Promise<{ result: { casts: Cast[] } }>
+  getCastsInThread(
+    threadHash: string,
+    viewer: number,
+  ): Promise<{ result: { casts: CastWithViewerContext[] } }>
+  getCastsInThread(threadHash: string, viewer?: number | null) {
+    const params = new URLSearchParams({ threadHash })
+    if (viewer) params.set('viewerFid', viewer.toString())
+    return this.get<{
+      result: { casts: Cast[] | CastWithViewerContext[] }
+    }>('all-casts-in-thread', params, 1)
   }
 
   postCast(
