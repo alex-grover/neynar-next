@@ -35,6 +35,13 @@ export type Cast = {
   }
 }
 
+export type CastWithViewerContext = Cast & {
+  viewerContext: {
+    liked: boolean
+    recasted: boolean
+  }
+}
+
 type Embed = {
   url: string
 }
