@@ -125,18 +125,23 @@ export default class NeynarClient {
     return this.get<FeedResponse>('feed', params)
   }
 
+  getCast(type: 'url' | 'hash', identifier: string) {
+    const params = new URLSearchParams({ type, identifier })
+    return this.get<{ cast: Cast }>('cast', params)
+  }
+
   postCast(
     signerUuid: string,
     text: string,
     extra?: { embeds?: { url: string }[]; parent?: string },
   ) {
-    const params: Json = {
+    const body: Json = {
       signer_uuid: signerUuid,
       text,
     }
-    if (extra?.embeds) params.embeds = extra.embeds
-    if (extra?.parent) params.parent = extra.parent
-    return this.post<PostCastResponse>('cast', params)
+    if (extra?.embeds) body.embeds = extra.embeds
+    if (extra?.parent) body.parent = extra.parent
+    return this.post<PostCastResponse>('cast', body)
   }
 
   deleteCast(signerUuid: string, hash: Hash) {
