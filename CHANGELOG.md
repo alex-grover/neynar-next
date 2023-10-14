@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.7](https://github.com/alex-grover/neynar-next/compare/v0.2.6...v0.2.7) (2023-10-14)
+
+
+### Features
+
+* add get cast information api ([13ef187](https://github.com/alex-grover/neynar-next/commit/13ef1874c733cd3419c3d99de4c2007f5706d82e))
+* add get casts in thread api ([5d34c4b](https://github.com/alex-grover/neynar-next/commit/5d34c4bcfc33db41691b39eb2455fcc41f200556))
+* add get mentions and replies api ([37a157d](https://github.com/alex-grover/neynar-next/commit/37a157d0f62685971e701d436236445ac922cb7c))
+
 ## [0.2.6](https://github.com/alex-grover/neynar-next/compare/v0.2.5...v0.2.6) (2023-10-06)
 
 
