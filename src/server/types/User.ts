@@ -1,4 +1,4 @@
-import { Hash } from 'viem'
+import { Address } from 'viem'
 
 export type User = {
   fid: number
@@ -10,12 +10,12 @@ export type User = {
   profile: {
     bio: {
       text: string
-      mentions: [] // This always seems to be empty
+      mentions: [] // Known bug - this is always empty
     }
   }
   followerCount: number
   followingCount: number
-  verifications: Hash[]
+  verifications: Address[]
   activeStatus: 'active' | 'inactive'
 }
 

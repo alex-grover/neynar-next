@@ -4,6 +4,8 @@ import {
   Cast,
   CastWithViewerContext,
   GeneratedSigner,
+  Notification,
+  NotificationWithViewerContext,
   PendingSigner,
   Signer,
   User,
@@ -145,6 +147,46 @@ export default class NeynarClient {
     return this.get<{
       result: { casts: Cast[] | CastWithViewerContext[] }
     }>('all-casts-in-thread', params, 1)
+  }
+
+  getMentionsAndReplies(
+    fid: number,
+    options?: { viewer?: never; cursor?: string; limit?: number },
+  ): Promise<{
+    result: {
+      notifications: Notification[]
+      next: {
+        cursor: string
+      }
+    }
+  }>
+  getMentionsAndReplies(
+    fid: number,
+    options?: { viewer: number; cursor?: string; limit?: number },
+  ): Promise<{
+    result: {
+      notifications: NotificationWithViewerContext[]
+      next: {
+        cursor: string
+      }
+    }
+  }>
+  getMentionsAndReplies(
+    fid: number,
+    options: { viewer?: number; cursor?: string; limit?: number } = {},
+  ) {
+    const params = new URLSearchParams({ fid: fid.toString() })
+    if (options.viewer) params.set('viewerFid', options.viewer.toString())
+    if (options.cursor) params.set('cursor', options.cursor)
+    if (options.limit) params.set('limit', options.limit.toString())
+    return this.get<{
+      result: {
+        notifications: Notification[] | NotificationWithViewerContext[]
+        next: {
+          cursor: string // TODO: is this nullable if there are no more?
+        }
+      }
+    }>('mentions-and-replies', params, 1)
   }
 
   postCast(
