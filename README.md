@@ -11,8 +11,10 @@ This repo is a work in progress, use at your own risk! Currently, the following 
 - [x] Sign in
 - [x] Get user profile by FID or username
 - [x] Fetch feed by following/channel/FID list
+- [x] Get cast and thread
 - [x] Post casts
 - [x] Cast reactions (like/unlike/recast/unrecast)
+- [x] Get notifications (mentions and replies)
 - [ ] Search users
 - [ ] Follow/unfollow
 
@@ -232,6 +234,8 @@ export default function QRCodeModal() {
 After signing in, you'll likely want to fetch the user's profile so you can display their username and avatar. To do this, we need to create an API route and then fetch the user from the client:
 
 ```ts
+// app/api/users/[fid]/route.ts
+
 type Props = {
   params: {
     fid: string
@@ -249,7 +253,7 @@ export async function GET(request: Request, { params }: Props) {
   const user = await neynarClient.getUserByFid(fid /*, viewer */)
   // Or fetch by username
   // await neynarClient.getUserByUsername('alexgrover.eth' /*, viewer */)
-  return NextResponse.json(signer)
+  return NextResponse.json(user)
 }
 ```
 
@@ -258,6 +262,7 @@ This library is agnostic of your client data fetching solution. The example uses
 ```tsx
 'use client'
 
+import { useSigner } from 'neynar-next'
 import { type User } from 'neynar-next/server'
 import useSWRImmutable from 'swr/immutable'
 
@@ -353,6 +358,57 @@ function getKey(signer: Signer | null): SWRInfiniteKeyLoader<FeedResponse> {
       params.set('cursor', previousPageData.next.cursor)
     return `${API_URL}?${params.toString()}`
   }
+}
+```
+
+</details>
+
+<details>
+<summary>Get cast or thread</summary>
+
+Add the API to your server:
+
+```ts
+// app/api/casts/[hash]/route.ts
+
+type Props = {
+  params: {
+    hash: string
+  }
+}
+
+export async function GET(request: Request, { params }: Props) {
+  const hash = params.hash
+  if (!hash || !hash.startsWith('0x'))
+    return new Response('hash is invalid', { status: 400 })
+
+  const { cast } = await neynarClient.getCast('hash', hash)
+  // Or fetch by url
+  // await neynarClient.getCast('url', 'https://warpcast.com/...')
+
+  // Or fetch thread
+  // You can pass an optional viewer FID to get back whether that FID has reacted to the cast already
+  // const { searchParams } = new URL(request.url)
+  // const viewer = searchParams.get('viewer')
+  // await neynarClient.getCastsInThread('0x...' /* , { viewer } */)
+  return NextResponse.json(cast)
+}
+```
+
+Then, hit the API from your client:
+
+```tsx
+'use client'
+
+import { type Cast } from 'neynar-next/server'
+import useSWR from 'swr'
+
+export default function CastDetailPage() {
+  const { data } = useSWR<Cast, string>(`/api/casts/0x...`)
+
+  if (!data) return null
+
+  return <div>{data.text}</div>
 }
 ```
 
@@ -480,6 +536,65 @@ export default function LikeButton({ cast }: LikeButtonProps) {
     >
       Like
     </button>
+  )
+}
+```
+
+</details>
+
+<details>
+<summary>Get notifications (mentions and replies)</summary>
+
+Add the API to your server:
+
+```ts
+// app/api/users/[fid]/notifications/route.ts
+type Props = {
+  params: {
+    fid: string
+  }
+}
+
+export async function GET(request: Request, { params }: Props) {
+  const fid = parseInt(params.fid)
+  if (!fid) return new Response('fid is invalid', { status: 400 })
+
+  // Optional viewer context and pagination params
+  // const { searchParams } = new URL(request.url)
+  // const viewer = searchParams.get('viewer')
+  // const cursor = searchParams.get('cursor')
+  // const limit = searchParams.get('limit')
+
+  const { result } = await neynarClient.getMentionsAndReplies(
+    fid /*, { viewer, cursor, limit } */,
+  )
+  return NextResponse.json(result)
+}
+```
+
+Then, hit the API from your client:
+
+```tsx
+'use client'
+
+import { type Notification } from 'neynar-next/server'
+import useSWR from 'swr/immutable'
+
+export default function Notifications() {
+  const { data } = useSWR<{ notifications: Notification[] }, string>(
+    signer?.status === 'approved'
+      ? `/api/users/${signer.fid}/notifications`
+      : null,
+  )
+
+  if (!data) return null
+
+  return (
+    <div>
+      {data.notifications.map((notification) => (
+        <div>{notification.text}</div>
+      ))}
+    </div>
   )
 }
 ```
