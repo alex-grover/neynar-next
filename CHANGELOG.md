@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.8](https://github.com/alex-grover/neynar-next/compare/v0.2.7...v0.2.8) (2023-10-23)
+
+
+### Bug Fixes
+
+* use correct cast type ([234c33a](https://github.com/alex-grover/neynar-next/commit/234c33a7429b2b032dae302548e8ed18739a100d))
+
 ## [0.2.7](https://github.com/alex-grover/neynar-next/compare/v0.2.6...v0.2.7) (2023-10-14)
 
 
