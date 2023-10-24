@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.0](https://github.com/alex-grover/neynar-next/compare/v0.2.8...v0.3.0) (2023-10-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* User APIs now return v2 user shape
+
+### Features
+
+* align type for v1 and v2 users ([5ecaea3](https://github.com/alex-grover/neynar-next/commit/5ecaea33fbc4d8dc761da336420e0b6b14dfb04f)), closes [#36](https://github.com/alex-grover/neynar-next/issues/36)
+
 ## [0.2.8](https://github.com/alex-grover/neynar-next/compare/v0.2.7...v0.2.8) (2023-10-23)
 
 
