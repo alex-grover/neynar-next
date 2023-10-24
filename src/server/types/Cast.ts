@@ -1,4 +1,5 @@
 import { Address, Hash } from 'viem'
+import { User } from './User'
 
 export type Cast = {
   hash: Hash
@@ -8,21 +9,7 @@ export type Cast = {
   parent_author: {
     fid: number | null
   }
-  author: {
-    fid: number
-    username: string
-    display_name: string
-    pfp_url: string
-    profile: {
-      bio: {
-        text: string
-      }
-    }
-    follower_count: number
-    following_count: number
-    verifications: Address[]
-    active_status: 'active' | 'inactive'
-  }
+  author: User
   text: string
   timestamp: string
   embeds: Embed[]

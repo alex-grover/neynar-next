@@ -6,12 +6,15 @@ import {
   CastV1WithViewerContext,
   CastWithViewerContext,
   convertCasts,
+  convertUser,
   GeneratedSigner,
   Notification,
   NotificationWithViewerContext,
   PendingSigner,
   Signer,
   User,
+  UserV1,
+  UserV1WithViewerContext,
   UserWithViewerContext,
 } from './types'
 
@@ -78,9 +81,9 @@ export default class NeynarClient {
     const params = new URLSearchParams({ fid: fid.toString() })
     if (viewer) params.set('viewerFid', viewer.toString())
     const response = await this.get<{
-      result: { user: User | UserWithViewerContext }
+      result: { user: UserV1 | UserV1WithViewerContext }
     }>('user', params, 1)
-    return response.result.user
+    return convertUser(response.result.user)
   }
 
   getUserByUsername(username: string, viewer?: null): Promise<User>
@@ -92,9 +95,9 @@ export default class NeynarClient {
     const params = new URLSearchParams({ username })
     if (viewer) params.set('viewerFid', viewer.toString())
     const response = await this.get<{
-      result: { user: User | UserWithViewerContext }
+      result: { user: UserV1 | UserV1WithViewerContext }
     }>('user-by-username', params, 1)
-    return response.result.user
+    return convertUser(response.result.user)
   }
 
   getFollowingFeed(fid: number, { cursor, limit }: Pagination = {}) {
