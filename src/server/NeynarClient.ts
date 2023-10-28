@@ -8,9 +8,10 @@ import {
   convertCasts,
   convertUser,
   GeneratedSigner,
-  Notification,
-  NotificationWithViewerContext,
+  MentionsAndRepliesNotification,
+  MentionsAndRepliesNotificationWithViewerContext,
   PendingSigner,
+  ReactionsAndRecastsNotification,
   Signer,
   User,
   UserV1,
@@ -161,7 +162,7 @@ export default class NeynarClient {
     options?: { viewer?: never; cursor?: string; limit?: number },
   ): Promise<{
     result: {
-      notifications: Notification[]
+      notifications: MentionsAndRepliesNotification[]
       next: {
         cursor: string
       }
@@ -172,7 +173,7 @@ export default class NeynarClient {
     options?: { viewer: number; cursor?: string; limit?: number },
   ): Promise<{
     result: {
-      notifications: NotificationWithViewerContext[]
+      notifications: MentionsAndRepliesNotificationWithViewerContext[]
       next: {
         cursor: string
       }
@@ -188,12 +189,55 @@ export default class NeynarClient {
     if (options.limit) params.set('limit', options.limit.toString())
     return this.get<{
       result: {
-        notifications: Notification[] | NotificationWithViewerContext[]
+        notifications:
+          | MentionsAndRepliesNotification[]
+          | MentionsAndRepliesNotificationWithViewerContext[]
         next: {
           cursor: string // TODO: is this nullable if there are no more?
         }
       }
     }>('mentions-and-replies', params, 1)
+  }
+
+  // The `viewer` parameter doesn't seem to change the response
+  // getReactionsAndRecasts(
+  //   fid: number,
+  //   options?: { viewer: number; cursor?: string; limit?: number },
+  // ): Promise<{
+  //   result: {
+  //     notifications: ReactionsAndRecastsNotificationWithViewerContext[]
+  //     next: {
+  //       cursor: string
+  //     }
+  //   }
+  // }>
+  getReactionsAndRecasts(
+    fid: number,
+    options?: { viewer?: never; cursor?: string; limit?: number },
+  ): Promise<{
+    result: {
+      notifications: ReactionsAndRecastsNotification[]
+      next: {
+        cursor: string
+      }
+    }
+  }>
+  getReactionsAndRecasts(
+    fid: number,
+    options: { viewer?: number; cursor?: string; limit?: number } = {},
+  ) {
+    const params = new URLSearchParams({ fid: fid.toString() })
+    if (options.viewer) params.set('viewerFid', options.viewer.toString())
+    if (options.cursor) params.set('cursor', options.cursor)
+    if (options.limit) params.set('limit', options.limit.toString())
+    return this.get<{
+      result: {
+        notifications: ReactionsAndRecastsNotification[]
+        next: {
+          cursor: string // TODO: is this nullable if there are no more?
+        }
+      }
+    }>('reactions-and-recasts', params, 1)
   }
 
   postCast(
