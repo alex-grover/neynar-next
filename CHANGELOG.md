@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/alex-grover/neynar-next/compare/v0.3.0...v0.3.1) (2023-10-29)
+
+
+### Features
+
+* add reactions and recasts ([2f56923](https://github.com/alex-grover/neynar-next/commit/2f569233aef774c58b56bb31e983cce5199cfe0b))
+
 ## [0.3.0](https://github.com/alex-grover/neynar-next/compare/v0.2.8...v0.3.0) (2023-10-24)
 
 
