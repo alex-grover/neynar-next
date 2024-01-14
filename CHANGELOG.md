@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/alex-grover/neynar-next/compare/v0.3.1...v0.3.2) (2024-01-14)
+
+
+### Bug Fixes
+
+* update embed for cast ID ([bc1cbfd](https://github.com/alex-grover/neynar-next/commit/bc1cbfde2e31677688e13a6df2cd9974c1515ef3))
+
 ## [0.3.1](https://github.com/alex-grover/neynar-next/compare/v0.3.0...v0.3.1) (2023-10-29)
 
 
