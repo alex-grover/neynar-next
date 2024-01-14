@@ -30,7 +30,11 @@ export type CastWithViewerContext = Cast & {
 }
 
 type Embed = {
-  url: string
+  url?: string
+  cast_id?: {
+    fid: number
+    hash: Hash
+  }
 }
 
 type Like = {
