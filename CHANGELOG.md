@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.3](https://github.com/alex-grover/neynar-next/compare/v0.3.2...v0.3.3) (2024-01-14)
+
+
+### Bug Fixes
+
+* allow next 14 ([2f6af2b](https://github.com/alex-grover/neynar-next/commit/2f6af2bd8bc0013827db1932e6bea7fe1e71ca0e))
+
 ## [0.3.2](https://github.com/alex-grover/neynar-next/compare/v0.3.1...v0.3.2) (2024-01-14)
 
 
