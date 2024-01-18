@@ -1,5 +1,8 @@
 # 🪐 neynar-next [![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/alex-grover/neynar-next/ci.yml?branch=main)](https://github.com/alex-grover/neynar-next/actions/workflows/ci.yml?query=branch%3Amain) [![npm](https://img.shields.io/npm/v/neynar-next)](https://www.npmjs.com/package/neynar-next)
 
+> [!IMPORTANT]  
+> This project has been superseded by the official [Neynar Node.js SDK](https://github.com/neynarxyz/nodejs-sdk). It's suggested to use that going forward. Please get in touch if you need help migrating!
+
 Create Farcaster apps with Neynar. Built with Next.js in mind, but works with any React client and JavaScript server.
 
 **NOTE**: The approach to signers used below results in a new signer being created per app, as the signers are stored in the user's localStorage. This requires users to pay to register each device separately. It's possible to mitigate this issue by having the user authenticate separately (i.e. with SIWE) and then persisting the signer UUID and user ID in your backend so other clients can reuse it. I'm currently exploring how that approach could be incorporated into this library in the future.
